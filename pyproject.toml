@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "PDF-QnA"
+version = "0.1.0"
+description = ""
+authors = ["u.mitskevich"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9.10"
+streamlit = "^1.20.0"
+py-pdf-parser = "^0.10.2"
+PyPDF2 = "^3.0.1"
+fitz = "^0.0.1-alpha.2"
+
+[tool.poetry.dev-dependencies]
+openai = "streamlit"
+numpy = "^1.24.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
