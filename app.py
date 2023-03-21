@@ -57,7 +57,7 @@ pdf_file = st.file_uploader("Load your PDF", type="pdf")
 if pdf_file:
     path = pdf_file.read()
     text,_ = convert_pdf_to_txt_pages(pdf_file)
-    st.write(text[:10]+'.......')
+    st.write(text)
     
     # if False:
 
