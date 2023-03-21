@@ -14,7 +14,6 @@ fitz = "^0.0.1-alpha.2"
 tiktoken = "^0.3.2"
 matplotlib = "^3.7.1"
 plotly = "^5.13.1"
-sklearn = "^0.0.post2"
 scikit-learn = "^1.2.2"
 
 [tool.poetry.dev-dependencies]
