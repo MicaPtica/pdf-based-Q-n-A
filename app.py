@@ -133,7 +133,7 @@ if pdf_file:
 
         df['embeddings'] = df['embeddings'].apply(np.array)
         st.write(df)
-        st.info
+        
         return df
     
     df=get_emb(text)
