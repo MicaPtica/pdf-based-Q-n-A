@@ -1,6 +1,5 @@
 import streamlit as st
-import PyPDF2
-import io
+
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -10,7 +9,6 @@ import tiktoken
 import openai
 import pandas as pd
 import numpy as np
-import sklearn
 import os
 
 def remove_newlines(serie):
