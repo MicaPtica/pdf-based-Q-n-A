@@ -18,7 +18,7 @@ sklearn = "^0.0.post2"
 scikit-learn = "^1.2.2"
 
 [tool.poetry.dev-dependencies]
-openai = "streamlit"
+
 numpy = "^1.24.2"
 
 [build-system]
