@@ -12,10 +12,10 @@ import numpy as np
 import os
 
 def remove_newlines(serie):
-    serie = serie.replace('\n', ' ')
-    serie = serie.replace('\\n', ' ')
-    serie = serie.replace('  ', ' ')
-    serie = serie.replace('  ', ' ')
+    # serie = serie.replace('\n', ' ')
+    # serie = serie.replace('\\n', ' ')
+    # serie = serie.replace('  ', ' ')
+    # serie = serie.replace('  ', ' ')
     return serie
 
 def convert_pdf_to_txt_pages(path):
@@ -62,7 +62,7 @@ if pdf_file:
     # if False:
 
     tokenizer = tiktoken.get_encoding("cl100k_base")
-    max_tokens = 100
+    max_tokens = 25
 
     # Function to split the text into chunks of a maximum number of tokens
     def split_into_many(text, max_tokens = max_tokens):
