@@ -12,10 +12,10 @@ import numpy as np
 import os
 
 def remove_newlines(serie):
-    # serie = serie.replace('\n', ' ')
-    # serie = serie.replace('\\n', ' ')
-    # serie = serie.replace('  ', ' ')
-    # serie = serie.replace('  ', ' ')
+    serie = serie.replace('\n', ' ')
+    serie = serie.replace('\\n', ' ')
+    serie = serie.replace('  ', ' ')
+    serie = serie.replace('  ', ' ')
     return serie
 
 def convert_pdf_to_txt_pages(path):
@@ -57,22 +57,41 @@ pdf_file = st.file_uploader("Load your PDF", type="pdf")
 if pdf_file:
     path = pdf_file.read()
     text,_ = convert_pdf_to_txt_pages(pdf_file)
-    st.write(text)
+    # st.write(text)
     
     # if False:
 
     tokenizer = tiktoken.get_encoding("cl100k_base")
-    max_tokens = 25
+    max_tokens = 100
 
     # Function to split the text into chunks of a maximum number of tokens
     def split_into_many(text, max_tokens = max_tokens):
 
         # Split the text into sentences
         sentences = text.split('. ')
-
+        one_moar_time=True
+        while one_moar_time:
         # Get the number of tokens for each sentence
+            n_tokens = [len(tokenizer.encode(" " + sentence)) for sentence in sentences]
+            new_sents=[]
+            one_moar_time=False
+            # Loop through the sentences and tokens joined together in a tuple
+            for sentence, token in zip(sentences, n_tokens):
+
+                # If the number of tokens in the current sentence is greater than the max number of 
+                # tokens, go to the next sentence
+                if token > max_tokens:
+                    split_ind_correction=sentence[(len(sentence)//2)-10:(len(sentence)//2)+10].find(' ')
+                    new_sents.extend([sentence[:(len(sentence)//2)-10+split_ind_correction],sentence[(len(sentence)//2)-10+split_ind_correction:]])
+                    one_moar_time=True
+                else: 
+                    new_sents.append(sentence)
+            sentences=new_sents
+            # st.write(sentences)
+
+
+
         n_tokens = [len(tokenizer.encode(" " + sentence)) for sentence in sentences]
-        
         chunks = []
         tokens_so_far = 0
         chunk = []
@@ -81,17 +100,17 @@ if pdf_file:
         for sentence, token in zip(sentences, n_tokens):
 
             # If the number of tokens so far plus the number of tokens in the current sentence is greater 
-            # than the max number of tokens, then add the chunk to the list of chunks and reset
+            # than the max number of tokens, then add the churnk to the list of chunks and reset
             # the chunk and tokens so far
             if tokens_so_far + token > max_tokens:
-                chunks.append(". ".join(chunk) + ".")
+                chunks.append(". ".join(chunk))
+                # st.write(chunk)
                 chunk = []
                 tokens_so_far = 0
 
             # If the number of tokens in the current sentence is greater than the max number of 
             # tokens, go to the next sentence
-            if token > max_tokens:
-                continue
+
 
             # Otherwise, add the sentence to the chunk and add the number of tokens to the total
             chunk.append(sentence)
@@ -99,18 +118,11 @@ if pdf_file:
 
         return chunks
         
-    @st.cache_data 
+    # @st.cache_data 
     def get_emb(text):
-    # # Loop through the dataframe
-    # for row in df.iterrows():
 
-    #     # If the text is None, go to the next row
-    #     if row[1]['text'] is None:
-    #         continue
-
-    #     # If the number of tokens is greater than the max number of tokens, split the text into chunks
-    #     if row[1]['n_tokens'] > max_tokens:
-        shortened = split_into_many( remove_newlines(str(text)))
+        shortened = split_into_many( remove_newlines(text))
+        st.info('PDF parsed')
 
         df = pd.DataFrame(shortened, columns = ['text'])
         df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
@@ -118,10 +130,10 @@ if pdf_file:
         openai.api_key = os.environ["OPENAI_API_KEY"]
 
         df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(input=x, engine='text-embedding-ada-002')['data'][0]['embedding'])
-    # df.to_csv('processed/embeddings UG4_8_GL_FAQ.csv')
-    # df.head()
+
         df['embeddings'] = df['embeddings'].apply(np.array)
         st.write(df)
+        st.info
         return df
     
     df=get_emb(text)
