@@ -1,0 +1,8 @@
+streamlit
+pdfminer==20191125
+pdf2image
+tiktoken
+matplotlib
+plotly
+scikit-learn
+numpy
